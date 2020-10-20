@@ -1,9 +1,11 @@
 package com.example.apppimagepicker25082020;
 
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.apppimagepicker25082020.databinding.ActivityRandomBinding;
@@ -17,6 +19,7 @@ public class RandomActivity extends AppCompatActivity {
     int mIdImageRandom = -1;
     int mIndex = -1;
     int mScore = 0;
+    int REQUEST_CODE = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,17 @@ public class RandomActivity extends AppCompatActivity {
         initView();
         randomImage();
         countDownTime();
+        event();
+    }
+
+    private void event() {
+        mBinding.imgPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RandomActivity.this,ListImageActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+        });
     }
 
     private void initView() {
