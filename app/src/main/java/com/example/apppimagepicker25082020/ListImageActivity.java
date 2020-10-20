@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.example.apppimagepicker25082020.databinding.ActivityHomeBinding;
 import com.example.apppimagepicker25082020.databinding.ActivityListImageBinding;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class ListImageActivity extends AppCompatActivity {
@@ -29,6 +32,7 @@ public class ListImageActivity extends AppCompatActivity {
 
         mArrayNameImages = getResources().getStringArray(R.array.array_name_images);
 
+        Collections.shuffle(Arrays.asList(mArrayNameImages));
         for (int i = 0 ; i < mRow ; i++){
             TableRow tableRow = new TableRow(this);
             for (int y = 0 ; y < mColumn ; y++){
@@ -43,12 +47,26 @@ public class ListImageActivity extends AppCompatActivity {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(ListImageActivity.this, imageView.getTag().toString(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ListImageActivity.this,RandomActivity.class);
+                        intent.putExtra("idImage",Integer.parseInt(imageView.getTag().toString()));
+                        setResult(RESULT_OK ,intent);
+                        finish();
                     }
                 });
                 tableRow.addView(imageView);
             }
             mBinding.tableLayout.addView(tableRow);
         }
+        MyCountDown.getInstance().setOnListenerCountDown(new OnListenerCountDown() {
+            @Override
+            public void onTick(long countDownInterval) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        });
     }
 }

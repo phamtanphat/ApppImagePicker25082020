@@ -2,6 +2,8 @@ package com.example.apppimagepicker25082020;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,5 +71,31 @@ public class RandomActivity extends AppCompatActivity {
                 getPackageName()
         );
         mBinding.imgRandom.setImageResource(mIdImageRandom);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        MyCountDown.getInstance().stopCountDown();
+        mBinding.tvTime.setText("Time : 0");
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            int idImageChoose = data.getIntExtra("idImage",-1);
+            mBinding.imgPick.setImageResource(idImageChoose);
+            if (idImageChoose == mIdImageRandom){
+                Toast.makeText(this, "Chinh xac", Toast.LENGTH_SHORT).show();
+                mBinding.tvScore.setText("Score : " + ++mScore);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        randomImage();
+                        countDownTime();
+                    }
+                },2000);
+            }else{
+                Toast.makeText(this, "Ban da thua", Toast.LENGTH_SHORT).show();
+            }
+        }else if (requestCode == REQUEST_CODE && resultCode == RESULT_CANCELED){
+            Toast.makeText(this, "Ket thuc : ", Toast.LENGTH_SHORT).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
